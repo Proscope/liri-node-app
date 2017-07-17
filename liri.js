@@ -99,7 +99,7 @@ var liriArgument = process.argv[2];
 		function spotifyThisSong(songName) {
 			var songName = process.argv[3];
 			if(!songName){
-				songName = "What's my age again";
+				songName = "Carry on Wayward Son";
 			}
 			params = songName;
 			spotify.search({ type: "track", query: params }, function(err, data) {
@@ -123,3 +123,22 @@ var liriArgument = process.argv[2];
 				}
 			});
 		};	
+	// Do What It Says function, uses the reads and writes module to access the random.txt file and do what's written in it
+	function doWhatItSays() {
+		fs.readFile("random.txt", "utf8", function(error, data){
+			if (!error) {
+				doWhatItSaysResults = data.split(",");
+				spotifyThisSong(doWhatItSaysResults[0], doWhatItSaysResults[1]);
+			} else {
+				console.log("Error occurred" + error);
+			}
+		});
+	};
+	// Do What It Says function, uses the reads and writes module to access the log.txt file and write everything that returns in terminal in the log.txt file
+	function log(logResults) {
+	  fs.appendFile("log.txt", logResults, (error) => {
+	    if(error) {
+	      throw error;
+	    }
+	  });
+	}	
