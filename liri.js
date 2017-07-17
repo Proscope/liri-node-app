@@ -3,7 +3,7 @@ var fs = require("fs"); //reads and writes files
 var request = require("request");
 var keys = require("./keys.js");
 var twitter = require("twitter");
-var spotify = require ("spotify");
+var Spotify = require ("node-spotify-api");
 var liriArgument = process.argv[2];
 
 
@@ -98,7 +98,7 @@ var liriArgument = process.argv[2];
 		}
 	// Spotify function
 		function spotifyThisSong(songName) {
-			var client = new spotify({
+			var spotify = new Spotify({
 				id: keys.spotifyKeys.id,
 				secret: keys.spotifyKeys.secret
 			});
