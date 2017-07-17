@@ -3,8 +3,9 @@ var fs = require("fs"); //reads and writes files
 var request = require("request");
 var keys = require("./keys.js");
 var twitter = require("twitter");
-var spotify = require ("node-spotify-api");
+var spotify = require ("spotify");
 var liriArgument = process.argv[2];
+
 
 // Possible commands for liri app
 	switch(liriArgument) {
@@ -35,18 +36,18 @@ var liriArgument = process.argv[2];
 
 //Functions
 	//Movie Function
-		function moviethis() {
+		function movieThis() {
 			var movie = process.argv[3];
 			if (!movie) {
 				movie = "jaws";
 			}
 			params = movie
-			request("http://www.omdbapi.com/?t=" + params + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
+			request("http://www.omdbapi.com/?t=" + params + "&y=&plot=short&apikey=40e9cece", function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					var movieObject = JSON.parse(body);
 				//console.log(movieObject); // Show the text in the terminal
 				var movieResults =
-				"------------------------------ begin ------------------------------" + "\r\n"
+				"------------------------------ begin ------------------------------" + "\r\n"+
 				"Title: " + movieObject.Title+"\r\n"+
 				"Year: " + movieObject.Year+"\r\n"+
 				"Imdb Rating: " + movieObject.imdbRating+"\r\n"+
@@ -66,7 +67,7 @@ var liriArgument = process.argv[2];
 	};
 
 	//Twitter Function
-		function mytwitter() {
+		function myTweets() {
 			var client = new twitter({
 				consumer_key: keys.twitterKeys.consumer_key,
 				consumer_secret: keys.twitterKeys.consumer_secret,
@@ -80,7 +81,7 @@ var liriArgument = process.argv[2];
 			params = {screen_name: twitterUser};
 			client.get("statuses/user_timeline/", params, function(error, data, response) {
 				if (!error) {
-					for (var i =0, i < data.length, i++) {
+					for (var i = 0; i < data.length; i++) {
 						var twitterResults =
 						"@" + data[i].user.screen_name + ": " +
 						data[i].text + "\r\n" +
@@ -97,6 +98,10 @@ var liriArgument = process.argv[2];
 		}
 	// Spotify function
 		function spotifyThisSong(songName) {
+			var client = new spotify({
+				id: keys.spotifyKeys.id,
+				secret: keys.spotifyKeys.secret
+			});
 			var songName = process.argv[3];
 			if(!songName){
 				songName = "Carry on Wayward Son";
